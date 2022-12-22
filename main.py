@@ -1,21 +1,33 @@
 import numpy as np
 import pandas as pd
-
+import random
 from eckity.algorithms.simple_evolution import SimpleEvolution
 from eckity.breeders.simple_breeder import SimpleBreeder
+from eckity.creators.ga_creators.bit_string_vector_creator import GABitStringVectorCreator
 from eckity.evaluators.simple_individual_evaluator import SimpleIndividualEvaluator
+from eckity.genetic_operators.crossovers.vector_k_point_crossover import VectorKPointsCrossover
+from eckity.genetic_operators.mutations.vector_random_mutation import BitStringVectorNFlipMutation
+from eckity.genetic_operators.selections.tournament_selection import TournamentSelection
+from eckity.statistics.best_average_worst_statistics import BestAverageWorstStatistics
+from eckity.subpopulation import Subpopulation
+from eckity.termination_checkers.threshold_from_target_termination_checker import ThresholdFromTargetTerminationChecker
+
+N = 10
+M = 100
 
 
-def CNF():
-    return [[1, -2, 3], [2, 3, 4], [-1, -3, -4]]
+def gen_cnf(n):
+    return [[random.randrange(-n + 1, n - 1) for i in range(3)] for i in range(M)]
 
 
-def AssignmentClauseCount(assignment, cnf):
+cnf = gen_cnf(N)
+
+
+def assignment_clause_count(assignment):
     count = 0
     for clause in cnf:
         for literal in clause:
-            if (literal < 0 and assignment[abs(literal) - 1] == 0) or (
-                    literal > 0 and assignment[abs(literal) - 1] == 1):
+            if (literal < 0 and assignment[abs(literal)] == 0) or (literal > 0 and assignment[abs(literal)] == 1):
                 count += 1
                 break
     return count
@@ -34,13 +46,44 @@ class CNFSolverEvaluator(SimpleIndividualEvaluator):
             float
                 The evaluated fitness value of the given individual.
         """
-        cnf = CNF()
-        return AssignmentClauseCount(individual.vector, cnf)
+        return assignment_clause_count(individual.vector)
 
 
 def main():
-    ass = [1, 1, 1, 0]
-    print(AssignmentClauseCount(ass, CNF()))
+    print(cnf)
+
+    # Initialize the evolutionary algorithm
+    algo = SimpleEvolution(
+        Subpopulation(creators=GABitStringVectorCreator(length=N),
+                      population_size=2,
+                      # user-defined fitness evaluation method
+                      evaluator=CNFSolverEvaluator(),
+                      # maximization problem (fitness is sum of values), so higher fitness is better
+                      higher_is_better=True,
+                      elitism_rate=1/300,
+                      # genetic operators sequence to be applied in each generation
+                      operators_sequence=[
+                          VectorKPointsCrossover(probability=0.5, k=1),
+                          BitStringVectorNFlipMutation(probability=0.2, probability_for_each=0.05, n=N)
+                      ],
+                      selection_methods=[
+                          # (selection method, selection probability) tuple
+                          (TournamentSelection(tournament_size=3, higher_is_better=True), 1)
+                      ]
+                      ),
+        breeder=SimpleBreeder(),
+        max_workers=4,
+        max_generation=100,
+
+        termination_checker=ThresholdFromTargetTerminationChecker(optimal=M, threshold=0.0),
+        statistics=BestAverageWorstStatistics()
+    )
+
+    # evolve the generated initial population
+    algo.evolve()
+
+    # Execute (show) the best solution
+    # print(algo.execute())
 
 
 if __name__ == "__main__":
