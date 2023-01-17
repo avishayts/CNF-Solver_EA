@@ -11,7 +11,19 @@ This issue asks if every problem whose solution can be quickly (aka: polynomial 
 
 ![image](https://user-images.githubusercontent.com/77344388/212975790-0a016e88-d309-4975-8998-aa7eaa5f87fe.png)  
 
-In 1971, *Stephen Cook and Leonid Levin* showed that if there is a NP-Complete problem that can be solved in polynomial time, then every NP problem can be solved in polynomial time also. It means that P = NP.
+In 1971, *Stephen Cook and Leonid Levin* showed that if there is a NP-Complete problem that can be solved in polynomial time, then every NP problem can be solved in polynomial time also. It means that P = NP.  
+Some of the well-known NP-Complete problems are:
++ Knapsack problem  
++ Hamiltonian path problem  
++ Travelling salesman problem (decision version)  
++ Subgraph isomorphism problem  
++ Subset sum problem  
++ Clique problem  
++ Vertex cover problem  
++ Independent set problem  
++ Dominating set problem  
++ Graph coloring problem  
+
 
 One of the famous NP-Complete problems is **Boolean Satisfiability Problem**.  
 Boolean Satistiability Problem (SAT) is the problem of determining if there exists an interpretation that satisfies a given Boolean formula.  
@@ -22,3 +34,6 @@ Every SAT formula can be converted to **Conjunctive Normal Form**.
 **Literal** is an atomic formula. It is a variable or its negation. Examples: $x_1, \lnot x_4$.  
 **Clause** is a disjunction of literals. Example: $x_2\vee v_3\vee\lnot v_4$.  
 **Conjunctive Normal Form (CNF)** is a conjunction of clauses. Example: $(x_1\vee\lnot x_3\vee x_4\ )\land(\lnot x_1\vee x_2)$.  
+
+## CNF-Solver_EA
+CNF-Solver_EA is an evolutionary algorithm ......
