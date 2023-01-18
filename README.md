@@ -36,4 +36,16 @@ Every SAT formula can be converted to **Conjunctive Normal Form**.
 **Conjunctive Normal Form (CNF)** is a conjunction of clauses. Example: $(x_1\vee\lnot x_3\vee x_4\ )\land(\lnot x_1\vee x_2)$.  
 
 ## CNF-Solver_EA
-CNF-Solver_EA is an evolutionary algorithm ......
+CNF-Solver_EA is an evolutionary algorithm which get a CNF formula and finds satisfiable assignment.  
+
+### Parameters search  
+Given a CNF formula, we would like to find satisfiable assignment with the shortest time. Therefore, we need to find optimal parameters for the evolutionary algorithm.  
+The parameters that we would like to get their optimal values for the algorithm are:
++ Population size
++ Elitism rate
++ Crossover probability for individual
++ Mutation probability for individual
++ Mutation probability for each bit in individual
++ Tournament size
+
+#### Parameters search process  
