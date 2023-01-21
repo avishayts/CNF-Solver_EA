@@ -38,6 +38,15 @@ Every SAT formula can be converted to **Conjunctive Normal Form**.
 ## CNF-Solver_EA
 CNF-Solver_EA is an evolutionary algorithm which get a CNF formula and finds satisfiable assignment.  
 
+## Problem Description
+The problem is to find satisfiable assignment to a given CNF formula as described above.  
+The naive solution is to run over all the $2^n$ possibilities of the values of the variables, when $n$ is the amount of the variables.  
+This approach is very not efficient and when $n$ is very large, it might run for a very long time.  
+In this project we will show a solution to solve CNF formula by Evolutionary Algorithm.  
+
+## Problem Solution
+We will solve the CNF formula and find a satisfiable assignment by Evolutionary Algorithm
+
 ### Representation  
 CNF formula represents as list of sub-lists of integers, such that each sub-list represents a clause, and each integer represents literal.  
 The integer number represents the index of the variable. For example: 2 represent $x_2$.  
@@ -59,7 +68,7 @@ The maximum fitness is when all the clauses satistiable, means that the CNF form
 ### The evolution process
 TODO
 
-### Parameters search  
+## Parameters search  
 Given a CNF formula, we would like to find satisfiable assignment with the shortest time. Therefore, we need to find optimal parameters for the evolutionary algorithm.  
 The parameters that we would like to get their optimal values for the algorithm are:
 + Population size
@@ -69,8 +78,21 @@ The parameters that we would like to get their optimal values for the algorithm 
 + Mutation probability for each bit in individual
 + Tournament size
 
-#### Parameters search process  
-TODO
+### Parameters search functions  
++ **parameter_search(t_time):** This function gets an initial time which was received say from some initial run, and it try to find the optimal parameters with the constants N and M. the searching is done in a random search, i.e. each iteration the function choose randomly an optional value for each global parameter and runs the evolutionary algorithm with the random parameters. This was done intentionally in order to reduce significantly the runtime. Only if the random parameters achieved 'better' runtime and were no more less than 'delta' from the optimal fitness (i.e. M) they will be set globally.
+
++ **collect_data():** This function collects data on all the different runtime of the different algorithms (naïve algorithm, EC-KitY, EC-KitY after parameters search and pysat). This function generates a random CNF with N variables and M clauses at each iteration, and averages the sum of the runtimes obtained after 'experiment_loop' iterations. 
+The function will measure the runtime for a range of different N (in a ratio of 1:2 with M). The range can be set by the variable 'experiment_range'.
+
++ **assignment_clause_count(assignment):** Counts the number of the satisfied clauses.
+
++ **gen_cnf(n):** Generates a random CNF clause.
+
++ **naive_solver():** Solves the CNF clause with naive algorithm.
+
++ **by_pysat ():** Solves the CNF clause with pysat algorithm. 
+
++ **run():** Run the evolutionary algorithm.
 
 
 ## Sudoku  
@@ -97,6 +119,10 @@ The idea behind it is that for each cell $i,j$, we need to create $n*n$ variable
 ## Sudoku run example
 ### size $n = 2, 4*4$ board
 <img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">
+
+<ins>Parameters:</ins>  
+*Population size:* 4  
+*Tournament size:* 2
 
 ### size $n = 3, 9*9$ board
 <img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">
