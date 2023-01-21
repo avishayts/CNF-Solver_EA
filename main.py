@@ -2,7 +2,6 @@ import itertools
 import random
 import time
 import math
-from pprint import pprint
 
 from eckity.algorithms.simple_evolution import SimpleEvolution
 from eckity.breeders.simple_breeder import SimpleBreeder
@@ -15,6 +14,7 @@ from eckity.statistics.best_average_worst_statistics import BestAverageWorstStat
 from eckity.subpopulation import Subpopulation
 from eckity.termination_checkers.threshold_from_target_termination_checker import ThresholdFromTargetTerminationChecker
 from pysat.solvers import Solver
+from pprint import pprint
 import Sudoku
 
 global N
@@ -45,9 +45,19 @@ def assignment_clause_count(assignment):
     return count
 
 
+def assignment_clause_count_sudoku(assignment):
+    count = 0
+    for clause in cnf:
+        for literal in clause:
+            if (literal < 0 and assignment[Sudoku.map_to_index(cnf, abs(literal))] == 0) or (literal > 0 and assignment[Sudoku.map_to_index(cnf, abs(literal))] == 1):
+                count += 1
+                break
+    return count
+
+
 class CNFSolverEvaluator(SimpleIndividualEvaluator):
     def _evaluate_individual(self, individual):
-        return assignment_clause_count(individual.vector)
+        return assignment_clause_count_sudoku(individual.vector)
 
 
 def run():
@@ -74,7 +84,7 @@ def run():
                       ),
         breeder=SimpleBreeder(),
         max_workers=MAX_WORKERS,
-        max_generation=1000,
+        max_generation=100,
 
         termination_checker=ThresholdFromTargetTerminationChecker(optimal=M, threshold=0.0)
         # statistics=BestAverageWorstStatistics()
@@ -260,11 +270,11 @@ if __name__ == "__main__":
     # print(data[2])
     # print(data[3])
     # print(data[4])
-    POPULATION_SIZE = 8
+    POPULATION_SIZE = 300
     ELITISM_RATE = 0.36
     CROSSOVER_PROBABILITY = 0.5784
-    MUTATION_PROBABILITY = 0.4088
-    MUTATION_PROBABILITY_FOR_EACH = 0.0607
+    MUTATION_PROBABILITY = 0.2
+    MUTATION_PROBABILITY_FOR_EACH = 0.05
     TOURNAMENT_SIZE = 4
     MAX_WORKERS = 4
     # n = 3
@@ -272,12 +282,14 @@ if __name__ == "__main__":
     # N = pow(n*n, 3)
     # M = len(cnf)
     # run()
-    n = 2
-    cnf = Sudoku.create_CNF(n, Sudoku.board_4x4)
-    N = pow(n*n, 3)
+    n = 3
+    board = Sudoku.board_9x9
+    cnf = Sudoku.create_CNF(n, board)
+    N = Sudoku.num_of_variables(cnf)
+    print(N)
     M = len(cnf)
     print(M)
     assignment = run()
-    Sudoku.fill_board(n, Sudoku.board_4x4, assignment)
-    pprint(Sudoku.board_4x4)
+    Sudoku.fill_board(n, board, assignment, cnf)
+    pprint(board)
 
