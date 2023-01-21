@@ -81,12 +81,22 @@ The reduction process is:
 3. Decoder: Takes the assignment from the CNF-Solver and fills the rest of the Sudoku board from it.
 
 ### Sudoku functions
-**create_CNF(n, board)**: Gets a sudoku board with size $n^2 * n^2$, and generates from it CNF fromula.  
-**num_of_variables(cnf)**: Gets a CNF formula and returns the number of different variables.  
-**fill_board(n, board, assignment)**: Gets a sudoku board, and fills it cells according the assignment.  
-**print_board(board)**: Gets a sudoku board and prints it.  
-**v(i, j, d, n)**: Returns an integer according the cell and the value of the board. The calculation is: $pow(n, 4) * (i - 1) + n * n * (j - 1) + d$.  
-The idea behind it is that for each cell $i,j$, we need to create $n*n$ variables.  
-**map_to_index(literal)**: gets a literal and returns its corresponding index of the individual.  
++ **create_CNF(n, board)**: Gets a sudoku board with size $n^2 * n^2$, and generates from it CNF fromula.  
 
-### Sudoku run example
++ **num_of_variables(cnf)**: Gets a CNF formula and returns the number of different variables.  
+
++ **fill_board(n, board, assignment)**: Gets a sudoku board, and fills it cells according the assignment.  
+
++ **print_board(board)**: Gets a sudoku board and prints it.  
+
++ **v(i, j, d, n)**: Returns an integer according the cell and the value of the board. The calculation is: $pow(n, 4) * (i - 1) + n * n * (j - 1) + d$.  
+The idea behind it is that for each cell $i,j$, we need to create $n*n$ variables.  
+
++ **map_to_index(literal)**: gets a literal and returns its corresponding index of the individual.  
+
+## Sudoku run example
+### size $n = 2, 4*4$ board
+<img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">
+
+### size $n = 3, 9*9$ board
+<img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">
