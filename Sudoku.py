@@ -1,12 +1,13 @@
-from pprint import pprint
 import itertools
+
+global map_value_to_index
 
 
 def v(i, j, d, n):
     return pow(n, 4) * (i - 1) + n * n * (j - 1) + d
 
 
-def base_clauses(n, board):
+def base_clauses(n):
     res = []
     # for all cells, ensure that the each cell:
     for i in range(1, n*n+1):
@@ -30,12 +31,11 @@ def base_clauses(n, board):
         valid([(i, j) for j in range(1, n*n+1)])
         valid([(j, i) for j in range(1, n*n+1)])
 
-    # ensure 3x3 sub-grids "regions" have distinct values
+    # ensure nxn sub-grids "regions" have distinct values
     for i in range(1, n*n+1, n):
         for j in range(1, n*n+1, n):
             valid([(i + k % n, j + k // n) for k in range(n*n)])
 
-    # assert len(res) == 81 * (1 + 36) + 27 * 324
     return res
 
 
@@ -87,48 +87,42 @@ def remove_from_board(n, board, clauses):
 def num_of_variables(clauses):
     flat_clauses = [item for sublist in clauses for item in sublist]
     set_clauses = set(flat_clauses)
-    # print(set_clauses)
     return int(len(set_clauses)/2)
 
 
 def create_CNF(n, board):
-    pprint(board)
+    global map_value_to_index
+    print(f'Generating CNF formula from board with size {n*n}x{n*n}:')
+    print_board(board)
     # solve a Sudoku problem
-    clauses = base_clauses(n, board)
-    # for i in range(1, n*n+1):
-    #     for j in range(1, n*n+1):
-    #         d = board[i - 1][j - 1]
-    #         # For each digit already known, a clause (with one literal).
-    #         if d:
-    #             clauses.append([v(i, j, d, n)])
-    #             for k in range (1, n*n+1):
-    #                 if k != d:
-    #                     clauses.append([-v(i, j, k, n)])
-    # pprint(clauses)
+    clauses = base_clauses(n)
     clauses = remove_from_board(n, board, clauses)
-    # pprint(clauses)
+    flat_clauses = [item for sublist in clauses for item in sublist]
+    set_flat_clauses = list(set(flat_clauses))
+    map_value_to_index = list(filter(lambda i: i >= 0, set_flat_clauses))
+    map_value_to_index.sort()
     return clauses
 
 
-def map_to_index(cnf, literal):
-    flat_clauses = [item for sublist in cnf for item in sublist]
-    set_clauses = list(set(flat_clauses))
-    set_clauses = list(filter(lambda i: i >= 0, set_clauses))
-    set_clauses.sort()
-    return set_clauses.index(literal)
+def map_to_index(literal):
+    return map_value_to_index.index(literal)
 
 
-def fill_board(n, board, assignment, cnf):
-    flat_clauses = [item for sublist in cnf for item in sublist]
-    set_clauses = list(set(flat_clauses))
-    set_clauses = list(filter(lambda i: i >= 0, set_clauses))
-    set_clauses.sort()
+def fill_board(n, board, assignment):
+    global map_value_to_index
+    new_board = board
     for i in range(1, n*n+1):
         for j in range(1, n*n+1):
             for d in range(1, n*n+1):
-                if set_clauses.count(v(i, j, d, n)) != 0:
-                    if assignment[set_clauses.index(v(i, j, d, n))] == 1:
-                        board[i - 1][j - 1] = d
+                if map_value_to_index.count(v(i, j, d, n)) != 0:
+                    if assignment[map_value_to_index.index(v(i, j, d, n))] == 1:
+                        new_board[i - 1][j - 1] = d
+    return new_board
+
+
+def print_board(board):
+    for i in range(len(board)):
+        print(board[i])
 
 
 board_9x9 = [[0, 6, 0, 1, 0, 9, 4, 2, 7],

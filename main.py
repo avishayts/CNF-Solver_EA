@@ -14,7 +14,6 @@ from eckity.statistics.best_average_worst_statistics import BestAverageWorstStat
 from eckity.subpopulation import Subpopulation
 from eckity.termination_checkers.threshold_from_target_termination_checker import ThresholdFromTargetTerminationChecker
 from pysat.solvers import Solver
-from pprint import pprint
 import Sudoku
 
 global N
@@ -29,10 +28,12 @@ global MUTATION_PROBABILITY
 global MUTATION_PROBABILITY_FOR_EACH
 global TOURNAMENT_SIZE
 global MAX_WORKERS
+global MAX_GENERATION
 
+sudoku_boards = [Sudoku.board_4x4, Sudoku.board_9x9]
 
 def gen_cnf(n):
-    return [[random.randrange(1, n+1) if (random.random() > 0.5) else -random.randrange(1, 10) for _ in range(3)] for _ in range(M)]
+    return [[random.randrange(1, n+1) if (random.random() > 0.5) else -random.randrange(1, n+1) for _ in range(3)] for _ in range(M)]
 
 
 def assignment_clause_count(assignment):
@@ -49,7 +50,7 @@ def assignment_clause_count_sudoku(assignment):
     count = 0
     for clause in cnf:
         for literal in clause:
-            if (literal < 0 and assignment[Sudoku.map_to_index(cnf, abs(literal))] == 0) or (literal > 0 and assignment[Sudoku.map_to_index(cnf, abs(literal))] == 1):
+            if (literal < 0 and assignment[Sudoku.map_to_index(abs(literal))] == 0) or (literal > 0 and assignment[Sudoku.map_to_index(abs(literal))] == 1):
                 count += 1
                 break
     return count
@@ -84,7 +85,7 @@ def run():
                       ),
         breeder=SimpleBreeder(),
         max_workers=MAX_WORKERS,
-        max_generation=100,
+        max_generation=MAX_GENERATION,
 
         termination_checker=ThresholdFromTargetTerminationChecker(optimal=M, threshold=0.0)
         # statistics=BestAverageWorstStatistics()
@@ -93,8 +94,8 @@ def run():
     # evolve the generated initial population
     algo.evolve()
     # Execute (show) the best solution
-    return algo.execute()
     # return time.time() - start, algo.best_of_run_.get_pure_fitness()
+    return time.time() - start, algo.execute(), algo.best_of_run_.get_pure_fitness()
 
 
 def naive_solver():
@@ -257,6 +258,34 @@ def collect_data():
     return default, improved, pysat, naive, params_improved
 
 
+def run_sudoku_example(n):
+    global MAX_GENERATION
+    global cnf
+    global N
+    global M
+    if n == 2:
+        board = Sudoku.board_4x4
+    else:
+        board = Sudoku.board_9x9
+    cnf = Sudoku.create_CNF(n, board)
+    N = Sudoku.num_of_variables(cnf)
+    M = len(cnf)
+    print(f'CNF Number of variables:{N}, Number of clauses:{M}')
+    res = []
+    gens = [10, 20, 40, 60, 80, 100, 130, 160, 200, 300, 500]
+    for i in range(len(gens)):
+        print(f'Maximum Generations: {gens[i]}')
+        MAX_GENERATION = gens[i]
+        results = run()
+        res.append(gens[i])
+        assignment = list(results[1])
+        print(f'Num of satisfiable clauses: {results[2]}/{M}')
+        board_result = Sudoku.fill_board(n, board, assignment)
+        Sudoku.print_board(board_result)
+        print()
+        time.sleep(5)
+
+
 if __name__ == "__main__":
     # data = collect_data()
     # default_data = data[0]
@@ -270,26 +299,14 @@ if __name__ == "__main__":
     # print(data[2])
     # print(data[3])
     # print(data[4])
-    POPULATION_SIZE = 300
+    POPULATION_SIZE = 20
     ELITISM_RATE = 0.36
-    CROSSOVER_PROBABILITY = 0.5784
-    MUTATION_PROBABILITY = 0.2
-    MUTATION_PROBABILITY_FOR_EACH = 0.05
+    CROSSOVER_PROBABILITY = 0.6
+    MUTATION_PROBABILITY = 0.3
+    MUTATION_PROBABILITY_FOR_EACH = 0.4
     TOURNAMENT_SIZE = 4
     MAX_WORKERS = 4
-    # n = 3
-    # cnf = Sudoku.create_CNF(n, Sudoku.board_9x9)
-    # N = pow(n*n, 3)
-    # M = len(cnf)
-    # run()
-    n = 3
-    board = Sudoku.board_9x9
-    cnf = Sudoku.create_CNF(n, board)
-    N = Sudoku.num_of_variables(cnf)
-    print(N)
-    M = len(cnf)
-    print(M)
-    assignment = run()
-    Sudoku.fill_board(n, board, assignment, cnf)
-    pprint(board)
+
+    sudoku_size = 2
+    run_sudoku_example(sudoku_size)
 
