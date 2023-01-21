@@ -84,10 +84,12 @@ def remove_from_board(n, board, clauses):
     return list(k for k, _ in itertools.groupby(clauses))
 
 
-def num_of_variables(clauses):
-    flat_clauses = [item for sublist in clauses for item in sublist]
+def num_of_variables(cnf):
+    flat_clauses = [item for sublist in cnf for item in sublist]
     set_clauses = set(flat_clauses)
-    return int(len(set_clauses)/2)
+    set_clauses = list(filter(lambda i: i >= 0, set_clauses))
+    set_clauses.sort()
+    return len(set_clauses)
 
 
 def create_CNF(n, board):
@@ -101,6 +103,14 @@ def create_CNF(n, board):
     set_flat_clauses = list(set(flat_clauses))
     map_value_to_index = list(filter(lambda i: i >= 0, set_flat_clauses))
     map_value_to_index.sort()
+    for i in range(len(clauses)):
+        for j in range(len(clauses[i])):
+            x = abs(clauses[i][j])
+            index = map_to_index(x) + 1
+            if clauses[i][j] < 0:
+                clauses[i][j] = -index
+            else:
+                clauses[i][j] = index
     return clauses
 
 
@@ -125,18 +135,29 @@ def print_board(board):
         print(board[i])
 
 
-board_9x9 = [[0, 6, 0, 1, 0, 9, 4, 2, 7],
-             [1, 0, 9, 8, 0, 7, 0, 0, 6],
-             [0, 0, 7, 0, 5, 0, 1, 0, 8],
-             [0, 5, 6, 9, 0, 0, 0, 8, 2],
-             [0, 0, 0, 6, 2, 0, 0, 4, 0],
-             [9, 4, 0, 0, 0, 5, 6, 1, 0],
-             [7, 0, 4, 0, 6, 0, 9, 0, 0],
-             [6, 0, 0, 0, 0, 8, 2, 0, 5],
-             [2, 9, 5, 3, 0, 1, 0, 6, 0]]
-
 board_4x4 = [[2, 0, 0, 0],
              [0, 1, 0, 2],
              [0, 0, 3, 0],
              [0, 0, 0, 4]]
 
+board_9x9 = [[0, 6, 0, 1, 0, 9, 4, 2, 7],
+             [1, 0, 9, 8, 0, 0, 0, 5, 6],
+             [0, 0, 7, 0, 5, 0, 1, 0, 8],
+             [0, 5, 6, 9, 0, 0, 0, 8, 2],
+             [0, 0, 1, 6, 2, 0, 0, 4, 0],
+             [9, 4, 0, 0, 0, 5, 6, 1, 0],
+             [7, 0, 4, 0, 6, 0, 9, 0, 0],
+             [6, 0, 3, 0, 0, 8, 2, 0, 5],
+             [2, 9, 5, 3, 0, 1, 0, 6, 0]]
+
+# board_9x9 = [[0, 2, 0, 0, 0, 0, 0, 3, 0],
+#             [0, 0, 0, 6, 0, 1, 0, 0, 0],
+#             [0, 6, 8, 2, 0, 0, 0, 0, 5],
+#             [0, 0, 9, 0, 0, 8, 3, 0, 0],
+#             [0, 4, 6, 0, 0, 0, 7, 5, 0],
+#             [0, 0, 1, 3, 0, 0, 4, 0, 0],
+#             [9, 0, 0, 0, 0, 7, 5, 1, 0],
+#             [0, 0, 0, 1, 0, 4, 0, 0, 0],
+#             [0, 1, 0, 0, 0, 0, 0, 9, 0]]
+
+sudoku_boards = [board_4x4, board_9x9]
