@@ -227,6 +227,9 @@ After less than 550 generations, there was an individual in the population that 
 <ins>Board result:</ins>  
 <img width="366" alt="3333333" src="https://user-images.githubusercontent.com/77344388/213909423-09e8e920-1670-48be-afa2-d5f3d1e8ffb4.PNG">
 
-<video src='https://youtu.be/Wm8UGhWSJzU' width=180/>  
+## Video
+[![CNF-Solver_EA – main py 22_01_2023 16_18_08](https://user-images.githubusercontent.com/77344388/213920570-f466788f-1988-4471-92e1-4b99019f462d.png)
+](https://www.youtube.com/watch?v=Wm8UGhWSJzU)
 
 ## Summary and Conclusion
+
