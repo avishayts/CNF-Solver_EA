@@ -120,6 +120,7 @@ The algorithm uses:
 + **Evaluator and Fitness:** `CNFSolverEvaluator()`. Returns the count of the satisfiable clauses by the individual's assignment vector. Higher is better.  
 + **Cross-over:** `VectorKPointsCrossover(probability=CROSSOVER_PROBABILITY, k=1)`. 1-point cross-over, with the optimal probability that found in parameters search.  
 + **Mutation:** `BitStringVectorNFlipMutation(probability=MUTATION_PROBABILITY, probability_for_each=MUTATION_PROBABILITY_FOR_EACH, n=N)`. For each individual it makes mutation with probability MUTATION_PROBABILITY, and flips each bit with probability MUTATION_PROBABILITY_FOR_EACH. The parameters are the ones that found in parameters search.
++ **Selection:** `TournamentSelection(tournament_size=TOURNAMENT_SIZE, higher_is_better=True)`. Selection is done by tournament with TOURNAMENT_SIZE parameter that found in parameters search.
 
 ## Sudoku  
 Sudoku problem is NP-Complete and has reduction to SAT problem.  
