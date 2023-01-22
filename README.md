@@ -61,7 +61,7 @@ For example: $[1,0,0,1]$ means that $x_1 = True, x_2 = False, x_3 = False, x_4 =
 The population consists of M individuals, such that each individual is bit string vector as describes above.  
 
 ### Fitness Function
-**assignment_clause_count(assignment)**: Recieves an assignment and count all the satisfiable clauses from the assignment.  
+`assignment_clause_count(assignment)`: Recieves an assignment and count all the satisfiable clauses from the assignment.  
 Higher fitness means higher satisfiable clauses.  
 The maximum fitness is when all the clauses satistiable, means that the CNF formula is satisfiable.
 
@@ -75,21 +75,30 @@ The parameters that we would like to get their optimal values for the algorithm 
 + Mutation probability for each bit in individual
 + Tournament size
 
-### Parameters search functions  
-+ **parameter_search(t_time):** This function gets an initial time which was received say from some initial run, and it try to find the optimal parameters with the constants N and M. the searching is done in a random search, i.e. each iteration the function choose randomly an optional value for each global parameter and runs the evolutionary algorithm with the random parameters. This was done intentionally in order to reduce significantly the runtime. Only if the random parameters achieved 'better' runtime and were no more less than 'delta' from the optimal fitness (i.e. M) they will be set globally.
+### Parameters search function  
+`parameter_search(t_time, params_ranges, loop_num, indicator, son, dynamic_search)`:  
 
-+ **collect_data():** This function collects data on all the different runtime of the different algorithms (naïve algorithm, EC-KitY, EC-KitY after parameters search and pysat). This function generates a random CNF with N variables and M clauses at each iteration, and averages the sum of the runtimes obtained after 'experiment_loop' iterations. 
+<ins>Non-Dynamic Search</ins>:  
+This function tries to find the optimal parameters with the constants N and M. The searching is done in a random search, i.e., each iteration the function chooses randomly an optional value for each global parameter and runs the evolutionary algorithm with the random parameters.  
+This was done intentionally in order to reduce significantly the runtime. Only if the random parameters achieved 'better' runtime and were no more less than 'delta' from the optimal fitness (i.e., M) they will be set globally.
+
+<ins>Dynamic Search</ins>:  
+if we assume that rather than the idea of a singular suitable set of global parameters, there are many ‘local’s maxima’  we can get  by different sets of global parameters, we may wish to keep on searching ‘locally’ after finding better new set of a global parameters. Nevertheless, we also wish to keep on searching for different ‘local’s maxima’.  
+This idea is exactly what dynamic search is doing. If a new random set of parameters got better results than the last best set, dynamic search will search for loop_num/2 iterations on relatively small ranges around the new parameters which was found. If a new better local set  was found, then it will be set as the best new set and the function will search locally recursively.  After the local search ends, the search will keep on searching randomly on the full ranges.  
+
+### Experiment functions
++ `collect_data()`: This function collects data on all the different runtime of the different algorithms (naïve algorithm, EC-KitY, EC-KitY after parameters search and pysat). This function generates a random CNF with N variables and M clauses at each iteration, and averages the sum of the runtimes obtained after 'experiment_loop' iterations. 
 The function will measure the runtime for a range of different N (in a ratio of 1:2 with M). The range can be set by the variable 'experiment_range'.
 
-+ **assignment_clause_count(assignment):** Counts the number of the satisfied clauses.
++ `assignment_clause_count(assignment)`: Counts the number of the satisfied clauses.
 
-+ **gen_cnf(n):** Generates a random CNF clause.
++ `gen_cnf(n)`: Generates a random CNF clause.
 
-+ **naive_solver():** Solves the CNF clause with naive algorithm.
++ `naive_solver()`: Solves the CNF clause with naive algorithm.
 
-+ **by_pysat ():** Solves the CNF clause with pysat algorithm. 
++ `by_pysat()`: Solves the CNF clause with pysat algorithm. 
 
-+ **run():** Run the evolutionary algorithm.  
++ `run()`: Run the evolutionary algorithm.  
 
 **Comparison between different algorithms and different parameters:**  
 ![image](https://user-images.githubusercontent.com/77344388/213907186-ca9b4af6-54db-4fb1-a962-3c62aa2449ab.png)
@@ -130,18 +139,18 @@ The reduction process is:
 3. Decoder: Takes the assignment from the CNF-Solver and fills the rest of the Sudoku board from it.
 
 ### Sudoku functions
-+ **create_CNF(n, board)**: Gets a sudoku board with size $n^2 * n^2$, and generates from it CNF fromula.  
++ `create_CNF(n, board)`: Gets a sudoku board with size $n^2 * n^2$, and generates from it CNF fromula.  
 
-+ **num_of_variables(cnf)**: Gets a CNF formula and returns the number of different variables.  
++ `num_of_variables(cnf)`: Gets a CNF formula and returns the number of different variables.  
 
-+ **fill_board(n, board, assignment)**: Gets a sudoku board, and fills it cells according the assignment.  
++ `fill_board(n, board, assignment)`: Gets a sudoku board, and fills it cells according the assignment.  
 
-+ **print_board(board)**: Gets a sudoku board and prints it.  
++ `print_board(board)`: Gets a sudoku board and prints it.  
 
-+ **v(i, j, d, n)**: Returns an integer according the cell and the value of the board. The calculation is: $pow(n, 4) * (i - 1) + n * n * (j - 1) + d$.  
++ `v(i, j, d, n)`: Returns an integer according the cell and the value of the board. The calculation is: $pow(n, 4) * (i - 1) + n * n * (j - 1) + d$.  
 The idea behind it is that for each cell $i,j$, we need to create $n*n$ variables.  
 
-+ **map_to_index(literal)**: gets a literal and returns its corresponding index of the individual.  
++ `map_to_index(literal)`: gets a literal and returns its corresponding index of the individual.  
 
 ## Sudoku run examples
 ## size $n = 2, 4*4$ board
@@ -217,5 +226,7 @@ After less than 550 generations, there was an individual in the population that 
 
 <ins>Board result:</ins>  
 <img width="366" alt="3333333" src="https://user-images.githubusercontent.com/77344388/213909423-09e8e920-1670-48be-afa2-d5f3d1e8ffb4.PNG">
+
+<video src='https://youtu.be/Wm8UGhWSJzU' width=180/>  
 
 ## Summary and Conclusion
