@@ -65,9 +65,6 @@ The population consists of M individuals, such that each individual is bit strin
 Higher fitness means higher satisfiable clauses.  
 The maximum fitness is when all the clauses satistiable, means that the CNF formula is satisfiable.
 
-### The evolution process
-TODO
-
 ## Parameters search  
 Given a CNF formula, we would like to find satisfiable assignment with the shortest time. Therefore, we need to find optimal parameters for the evolutionary algorithm.  
 The parameters that we would like to get their optimal values for the algorithm are:
@@ -92,8 +89,37 @@ The function will measure the runtime for a range of different N (in a ratio of 
 
 + **by_pysat ():** Solves the CNF clause with pysat algorithm. 
 
-+ **run():** Run the evolutionary algorithm.
++ **run():** Run the evolutionary algorithm.  
 
+**Comparison between different algorithms and different parameters:**  
+![image](https://user-images.githubusercontent.com/77344388/213907186-ca9b4af6-54db-4fb1-a962-3c62aa2449ab.png)
+![image](https://user-images.githubusercontent.com/77344388/213907187-9ec49f65-38e4-4418-ae1e-3ca811c2d0a0.png)
+![image](https://user-images.githubusercontent.com/77344388/213907192-4d13a960-5422-4bcb-b451-fe52c0524e07.png)
+![image](https://user-images.githubusercontent.com/77344388/213907193-17c82208-08b6-45bf-baab-a88cc3333e53.png)
+![image](https://user-images.githubusercontent.com/77344388/213907194-6174d952-702d-4811-a4a7-810527346562.png)
+![image](https://user-images.githubusercontent.com/77344388/213907198-c7de6236-17c0-4d74-a72b-f9dc0d54051a.png)
+![image](https://user-images.githubusercontent.com/77344388/213907199-9675fe72-db95-4367-a695-7b100a5b2069.png)
+![image](https://user-images.githubusercontent.com/77344388/213907202-dd58cf7c-b3de-46ff-9b87-9f44dc08d2c0.png)
+![image](https://user-images.githubusercontent.com/77344388/213907203-d46ac930-c7e1-4b6f-a417-6e4431cbbb24.png)
+![image](https://user-images.githubusercontent.com/77344388/213907207-bf3f53b8-fab6-4f29-aae9-d4b07bd6056a.png)
+
+**Conclusion**
++ We can see that the runtime of the impoved run (with the new parameters) decreased in comparison to the default parameters.  
++ The naive algorithm's runtime is very high.
++ There are algorithms that are very efficient such as pysat.  
++ Then we want to solve a CNF formula, we can search for parameters once, and then use those parameters for further runs when the CNF-formula is with the same size order.
+
+## Software Overview
+In order to use the CNF-Solver_EA to solve NP-Complete problem, the user must define the reduction from the problem to CNF formula.  
+It means that the user need to define encoder and decoder from the problem.  
+Then the user might want to search for optimal parameters as described above. We highly recommend to use this because without using optimization it might not solve the CNF formula, and if it does solve, we want it to be fast as it can be.
+
+The CNF-Solver uses Evolutionary Algorithm by EC-KitY library.  
+The algorithm uses:  
++ **Population and Representation:** `GABitStringVectorCreator(length=N)`. Each individual is bit string vector with size N (number of variables in formula).  
++ **Evaluator and Fitness:** `CNFSolverEvaluator()`. Returns the count of the satisfiable clauses by the individual's assignment vector. Higher is better.  
++ **Cross-over:** `VectorKPointsCrossover(probability=CROSSOVER_PROBABILITY, k=1)`. 1-point cross-over, with the optimal probability that found in parameters search.  
++ **Mutation:** `BitStringVectorNFlipMutation(probability=MUTATION_PROBABILITY, probability_for_each=MUTATION_PROBABILITY_FOR_EACH, n=N)`. For each individual it makes mutation with probability MUTATION_PROBABILITY, and flips each bit with probability MUTATION_PROBABILITY_FOR_EACH. The parameters are the ones that found in parameters search.
 
 ## Sudoku  
 Sudoku problem is NP-Complete and has reduction to SAT problem.  
@@ -118,11 +144,15 @@ The idea behind it is that for each cell $i,j$, we need to create $n*n$ variable
 
 ## Sudoku run example
 ### size $n = 2, 4*4$ board
-<img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">
-
+<img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">  
 <ins>Parameters:</ins>  
-*Population size:* 4  
-*Tournament size:* 2
+<img width="227" alt="Capture" src="https://user-images.githubusercontent.com/77344388/213907557-00e9376c-0017-4651-bab0-71bd4ec157c7.PNG">  
+<ins>Graph of #Generations/#Unsasifiable clauses:</ins>  
+
+![image](https://user-images.githubusercontent.com/77344388/213907636-d666e0cd-569f-46ac-ab68-6c6214a1e1a8.png)
+
+<ins>Board result:</ins>  
+<img width="343" alt="1" src="https://user-images.githubusercontent.com/77344388/213907663-953078bb-c21d-4e27-b8a0-2838972e48cd.PNG">
+
 
 ### size $n = 3, 9*9$ board
-<img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">
