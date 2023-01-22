@@ -1,6 +1,8 @@
 # CNF-Solver_EA
-### Dor Zarka 316495357
-### Avishay Tsur 316508431
+
+### Project Writers
++ Dor Zarka 316495357
++ Avishay Tsur 316508431
 
 ## Introduction
 One of the major unsolved issue of computer science is **P versus NP**.  
@@ -140,7 +142,7 @@ We ran all 4 algorithms with different values, and messures their runtime until 
 
 ## Software Overview
 In order to use the CNF-Solver_EA to solve NP-Complete problem, the user must define the reduction from the problem to CNF formula.  
-It means that the user need to define encoder and decoder from the problem.  
+It means that the user need to define encoder and decoder for the problem.  
 Then the user might want to search for optimal parameters as described above. We highly recommend to use this because without using optimization it might not solve the CNF formula, and if it does solve, we want it to be fast as it can be.
 
 The CNF-Solver uses Evolutionary Algorithm by EC-KitY library.  
