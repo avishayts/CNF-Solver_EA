@@ -44,7 +44,7 @@ The naive solution is to run over all the $2^n$ possibilities of the values of t
 This approach is very not efficient and when $n$ is very large, it might run for a very long time.  
 In this project we will show a solution to solve CNF formula by Evolutionary Algorithm.  
 
-## Problem Solution
+## Solution Description
 We will solve the CNF formula and find a satisfiable assignment by Evolutionary Algorithm
 
 ### Representation  
@@ -142,27 +142,71 @@ The idea behind it is that for each cell $i,j$, we need to create $n*n$ variable
 
 + **map_to_index(literal)**: gets a literal and returns its corresponding index of the individual.  
 
-## Sudoku run example
-### size $n = 2, 4*4$ board
+# Sudoku run example
+## size $n = 2, 4*4$ board
 <img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">  
+
+**Reduction Encoder**: The CNF formula that generated from the board is:  
+$[[-19, -20], [-19, -14], [-17, -20], [-17, -18], [-16, -18], [-15, -19], [-15, -16], [-12, -17], [-12, -13], [-11, -13], [-10, -15], [-10, -14], [-10, -11],$
+ $[-8, -11], [-8, -9], [-8, -2], [-7, -16], [-7, -8], [-7, -1], [-5, -14], [-5, -6], [-4, -9], [-3, -19], [-3, -5], [-3, -4], [-2, -13], [-2, -4], [-1, -18],$
+ $[-1, -6], [-1, -2], [1, 2], [3, 4], [5, 6], [7, 8], [9], [10, 11], [12, 13], [14], [15, 16], [17, 18], [19, 20]]$
+
+This formula has **20 variables** and **41 clauses**.
+
 <ins>Parameters:</ins>  
 <img width="227" alt="Capture" src="https://user-images.githubusercontent.com/77344388/213907557-00e9376c-0017-4651-bab0-71bd4ec157c7.PNG">  
+
 <ins>Graph of #Generations/#Unsasifiable clauses:</ins>  
 
 ![image](https://user-images.githubusercontent.com/77344388/213907636-d666e0cd-569f-46ac-ab68-6c6214a1e1a8.png)
+
+**Result:** Before the evolutionary algroithm started to run, the number of unsatifiable clauses of the best individual's assigment (from the initial population) was 4.  
+After 7 generations, there was an individual in the population that its assignment satisfied the CNF formula.
 
 <ins>Board result:</ins>  
 <img width="343" alt="1" src="https://user-images.githubusercontent.com/77344388/213907663-953078bb-c21d-4e27-b8a0-2838972e48cd.PNG">
 
 
-### size $n = 3, 9*9$ board
+## size $n = 3, 9*9$ board
 <img width="366" alt="9x9_start" src="https://user-images.githubusercontent.com/77344388/213909414-0e839395-8a13-432b-8e0b-ec4db20f5259.PNG">
+
+**Reduction Encoder**: The CNF formula that generated from the board is:  
+$[[-85, -86], [-85, -82], [-84, -85], [-83, -87], [-83, -84], [-80, -84], [-80, -82], [-80, -81], [-79, -83], [-79, -81], [-79, -80], [-78, -84], [-78, -82],$
+$[-78, -80], [-77, -83], [-77, -79], [-77, -78], [-74, -75], [-73, -75], [-70, -72], [-70, -71], [-68, -76], [-68, -74], [-68, -69], [-67, -75], [-65, -84],$
+$[-65, -80], [-65, -66], [-65, -55], [-65, -43], [-64, -67], [-64, -66], [-64, -65], [-64, -53], [-64, -41], [-63, -78], [-63, -65], [-63, -55], [-63, -43],$
+$[-63, -40], [-62, -66], [-61, -62], [-59, -75], [-59, -67], [-59, -60], [-58, -85], [-57, -58], [-56, -67], [-56, -59], [-56, -58], [-56, -57], [-55, -58],$
+$[-54, -55], [-53, -59], [-53, -56], [-53, -55], [-53, -54], [-52, -78], [-52, -65], [-52, -63], [-52, -58], [-52, -55], [-52, -43], [-52, -40], [-51, -54],$
+$[-51, -52], [-50, -69], [-50, -62], [-49, -58], [-49, -55], [-49, -52], [-49, -50], [-48, -59], [-48, -56], [-48, -53], [-48, -50], [-48, -49], [-47, -62],$
+$[-47, -50], [-46, -59], [-46, -56], [-46, -53], [-46, -48], [-46, -47], [-45, -85], [-45, -58], [-44, -67], [-44, -59], [-44, -56], [-44, -45], [-43, -55],$
+$[-43, -45], [-42, -43], [-41, -53], [-41, -44], [-41, -43], [-41, -42], [-40, -84], [-40, -80], [-40, -65], [-40, -55], [-40, -45], [-40, -43], [-39, -83],$
+$[-39, -79], [-39, -42], [-39, -40], [-38, -64], [-38, -53], [-38, -44], [-38, -41], [-38, -40], [-38, -39], [-37, -40], [-37, -39], [-37, -38], [-36, -48],$
+$[-36, -46], [-36, -44], [-36, -41], [-36, -38], [-34, -73], [-34, -35], [-33, -54], [-32, -42], [-32, -33], [-31, -53], [-31, -41], [-31, -34], [-31, -33],$
+$[-31, -32], [-30, -72], [-30, -33], [-30, -32], [-30, -31], [-29, -51], [-29, -33], [-28, -77], [-28, -32], [-28, -29], [-28, -16], [-28, -12], [-27, -70],$
+$[-27, -30], [-27, -29], [-27, -28], [-27, -14], [-26, -33], [-26, -29], [-25, -48], [-25, -34], [-25, -31], [-25, -26], [-24, -30], [-24, -27], [-24, -26],$
+$[-24, -25], [-23, -32], [-23, -28], [-22, -46], [-22, -36], [-22, -34], [-22, -31], [-22, -25], [-22, -23], [-22, -10], [-22, -4], [-20, -73], [-20, -34],$
+$[-20, -21], [-19, -57], [-19, -21], [-18, -56], [-18, -44], [-18, -34], [-18, -20], [-18, -19], [-17, -55], [-17, -43], [-16, -42], [-16, -32], [-16, -17],$
+$[-15, -53], [-15, -41], [-15, -31], [-15, -20], [-15, -18], [-15, -17], [-15, -16], [-14, -72], [-14, -30], [-14, -17], [-14, -16], [-14, -15], [-13, -84],$
+$[-13, -80], [-13, -65], [-13, -40], [-13, -17], [-12, -83], [-12, -79], [-12, -39], [-12, -32], [-12, -16], [-12, -13], [-11, -64], [-11, -38], [-11, -31],$
+$[-11, -20], [-11, -18], [-11, -15], [-11, -13], [-11, -12], [-10, -48], [-10, -25], [-10, -20], [-10, -18], [-10, -15], [-10, -11], [-9, -24], [-9, -14],$
+$[-9, -10], [-8, -64], [-8, -38], [-8, -31], [-8, -15], [-8, -11], [-7, -62], [-6, -69], [-6, -50], [-6, -7], [-5, -26], [-5, -6], [-4, -48], [-4, -25],$
+$[-4, -10], [-4, -8], [-4, -6], [-4, -5], [-3, -47], [-3, -7], [-3, -6], [-2, -3], [-1, -46], [-1, -36], [-1, -25], [-1, -22], [-1, -10], [-1, -8],$
+$[-1, -4], [-1, -3], [-1, -2], [1, 2, 3], [4, 5, 6], [7], [8], [9, 10], [11, 12, 13], [14, 15, 16, 17], [18, 19], [20, 21], [22, 23], [24, 25, 26],$
+$[27, 28, 29], [30, 31, 32, 33], [34, 35], [36], [37, 38, 39, 40], [41, 42, 43], [44, 45], [46, 47], [48, 49, 50], [51, 52], [53, 54, 55],$
+$[56, 57, 58], [59, 60], [61, 62], [63], [64, 65, 66], [67], [68, 69], [70, 71], [72], [73], [74, 75], [76], [77, 78], [79, 80, 81], [82], [83, 84], [85, 86], [87]]$
+
+This formula has **87 variables** and **292 clauses**.
+
 <ins>Parameters:</ins>  
  <img width="319" alt="2121" src="https://user-images.githubusercontent.com/77344388/213909189-fc069937-9f30-4f70-9137-c77593170d1a.PNG">
+
 <ins>Graph of #Generations/#Unsasifiable clauses:</ins>  
 
 ![image](https://user-images.githubusercontent.com/77344388/213909200-01d3f4eb-7a15-40bb-8231-44fd6b45f8fc.png)
 
+**Result:** Before the evolutionary algroithm started to run, the number of unsatifiable clauses of the best individual's assigment (from the initial population) was more than 50 (out of 292).  
+After less than 550 generations, there was an individual in the population that its assignment satisfied the CNF formula.
+
 <ins>Board result:</ins>  
 <img width="366" alt="3333333" src="https://user-images.githubusercontent.com/77344388/213909423-09e8e920-1670-48be-afa2-d5f3d1e8ffb4.PNG">
 
+## Summary and Conclusion
