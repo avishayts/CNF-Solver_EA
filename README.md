@@ -172,7 +172,7 @@ The reduction process is:
 + `v(i, j, d, n)`: Returns an integer according the cell and the value of the board. The calculation is: $pow(n, 4) * (i - 1) + n * n * (j - 1) + d$.  
 The idea behind it is that for each cell $i,j$, we need to create $n*n$ variables.  
 
-+ `map_to_index(literal)`: gets a literal and returns its corresponding index of the individual.  
++ `map_to_index(literal)`: Gets a literal and returns its corresponding index of the individual.  
 
 ## Sudoku run examples
 ## size $n = 2, 4*4$ board
