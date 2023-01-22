@@ -236,7 +236,7 @@ After less than 550 generations, there was an individual in the population that 
 ## Summary and Conclusion
 
 ## References
-+ https://github.com/EC-KitY/EC-KitY
-+ https://api.eckity.org/eckity.html
-+ http://www.evolutionarycomputation.org/slides/
-+ https://www.lri.fr/~conchon/ENSPSaclay/project/A_SAT-based_Sudoku_solver.pdf
++ [EC-KitY GitHub](https://github.com/EC-KitY/EC-KitY)
++ [EC-KitY API](https://api.eckity.org/eckity.html)
++ [Evolutionary Computation](http://www.evolutionarycomputation.org/slides/)
++ [Sudoku reduction to CNF](https://www.lri.fr/~conchon/ENSPSaclay/project/A_SAT-based_Sudoku_solver.pdf)
