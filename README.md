@@ -156,3 +156,13 @@ The idea behind it is that for each cell $i,j$, we need to create $n*n$ variable
 
 
 ### size $n = 3, 9*9$ board
+<img width="366" alt="9x9_start" src="https://user-images.githubusercontent.com/77344388/213909414-0e839395-8a13-432b-8e0b-ec4db20f5259.PNG">
+<ins>Parameters:</ins>  
+ <img width="319" alt="2121" src="https://user-images.githubusercontent.com/77344388/213909189-fc069937-9f30-4f70-9137-c77593170d1a.PNG">
+<ins>Graph of #Generations/#Unsasifiable clauses:</ins>  
+
+![image](https://user-images.githubusercontent.com/77344388/213909200-01d3f4eb-7a15-40bb-8231-44fd6b45f8fc.png)
+
+<ins>Board result:</ins>  
+<img width="366" alt="3333333" src="https://user-images.githubusercontent.com/77344388/213909423-09e8e920-1670-48be-afa2-d5f3d1e8ffb4.PNG">
+
