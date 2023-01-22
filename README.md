@@ -41,13 +41,17 @@ Every SAT formula can be converted to **Conjunctive Normal Form**.
 CNF-Solver_EA is an evolutionary algorithm which get a CNF formula and finds satisfiable assignment.  
 
 ## Problem Description
-The problem is to find satisfiable assignment to a given CNF formula as described above.  
+The problem is to find satisfiable assignment to a given CNF formula as described above and to find the optimal parameters for the evolutionay algorithm.
 The naive solution is to run over all the $2^n$ possibilities of the values of the variables, when $n$ is the amount of the variables.  
 This approach is very not efficient and when $n$ is very large, it might run for a very long time.  
-In this project we will show a solution to solve CNF formula by Evolutionary Algorithm.  
+In this project we will show a solution that finds the optimal the parameters for the evolutionary algorithm, and solve CNF formula.  
+It is important to find optimal parameters because there are cases which the algorithm does not provide a satisfiable assignment and fails to solve the CNF formula.  
+Another reason is that we want to use optimal parameters that finds solution and solve the CNF formula with the least amount of time, i.e the optimal parameters that solve the formula most efficiently.
 
 ## Solution Description
-We will solve the CNF formula and find a satisfiable assignment by Evolutionary Algorithm
+We will solve the CNF formula and find a satisfiable assignment by Evolutionary Algorithm.  
+First, we will find the optimal parameters by **Parameters Search** algorithm that will be described below.  
+When we find the optimal parameters, we will run the evolutionary algorithm with them.
 
 ### Representation  
 CNF formula represents as list of sub-lists of integers, such that each sub-list represents a clause, and each integer represents literal.  
@@ -88,7 +92,27 @@ This was done intentionally in order to reduce significantly the runtime. Only i
 if we assume that rather than the idea of a singular suitable set of global parameters, there are many ‘local’s maxima’  we can get  by different sets of global parameters, we may wish to keep on searching ‘locally’ after finding better new set of a global parameters. Nevertheless, we also wish to keep on searching for different ‘local’s maxima’.  
 This idea is exactly what dynamic search is doing. If a new random set of parameters got better results than the last best set, dynamic search will search for loop_num/2 iterations on relatively small ranges around the new parameters which was found. If a new better local set  was found, then it will be set as the best new set and the function will search locally recursively.  After the local search ends, the search will keep on searching randomly on the full ranges.  
 
-### Experiment functions
+**Graphs that show the dependence between number of variables (N) to the parameters that we search for:**
+
+![image](https://user-images.githubusercontent.com/77344388/213907193-17c82208-08b6-45bf-baab-a88cc3333e53.png)
+![image](https://user-images.githubusercontent.com/77344388/213907194-6174d952-702d-4811-a4a7-810527346562.png)
+![image](https://user-images.githubusercontent.com/77344388/213907198-c7de6236-17c0-4d74-a72b-f9dc0d54051a.png)
+![image](https://user-images.githubusercontent.com/77344388/213907199-9675fe72-db95-4367-a695-7b100a5b2069.png)
+![image](https://user-images.githubusercontent.com/77344388/213907202-dd58cf7c-b3de-46ff-9b87-9f44dc08d2c0.png)
+![image](https://user-images.githubusercontent.com/77344388/213907203-d46ac930-c7e1-4b6f-a417-6e4431cbbb24.png)
+![image](https://user-images.githubusercontent.com/77344388/213907207-bf3f53b8-fab6-4f29-aae9-d4b07bd6056a.png)
+
+**Conclusion**
++ When we want to solve a CNF formula, we can search for parameters once, and then use those parameters for further runs when the CNF-formula is with the same size order.
++ We can see that for different number of variables, there is different value to the parameter that optimize the algorithm.
+
+### Experiments and Comparison  
+After we found the optimal parameters, we want to compare it to other algorithms that solve CNF formulas:
++ Naive Algorithm
++ EA With default parameters
++ Pysat Algorithm
+
+#### Experiment functions  
 + `collect_data()`: This function collects data on all the different runtime of the different algorithms (naïve algorithm, EC-KitY, EC-KitY after parameters search and pysat). This function generates a random CNF with N variables and M clauses at each iteration, and averages the sum of the runtimes obtained after 'experiment_loop' iterations. 
 The function will measure the runtime for a range of different N (in a ratio of 1:2 with M). The range can be set by the variable 'experiment_range'.
 
@@ -102,23 +126,17 @@ The function will measure the runtime for a range of different N (in a ratio of 
 
 + `run()`: Run the evolutionary algorithm.  
 
+We ran all 4 algorithms with different values, and messures their runtime until they find a solution to the CNF formula.  
+
 **Comparison between different algorithms and different parameters:**  
 ![image](https://user-images.githubusercontent.com/77344388/213907186-ca9b4af6-54db-4fb1-a962-3c62aa2449ab.png)
 ![image](https://user-images.githubusercontent.com/77344388/213907187-9ec49f65-38e4-4418-ae1e-3ca811c2d0a0.png)
 ![image](https://user-images.githubusercontent.com/77344388/213907192-4d13a960-5422-4bcb-b451-fe52c0524e07.png)
-![image](https://user-images.githubusercontent.com/77344388/213907193-17c82208-08b6-45bf-baab-a88cc3333e53.png)
-![image](https://user-images.githubusercontent.com/77344388/213907194-6174d952-702d-4811-a4a7-810527346562.png)
-![image](https://user-images.githubusercontent.com/77344388/213907198-c7de6236-17c0-4d74-a72b-f9dc0d54051a.png)
-![image](https://user-images.githubusercontent.com/77344388/213907199-9675fe72-db95-4367-a695-7b100a5b2069.png)
-![image](https://user-images.githubusercontent.com/77344388/213907202-dd58cf7c-b3de-46ff-9b87-9f44dc08d2c0.png)
-![image](https://user-images.githubusercontent.com/77344388/213907203-d46ac930-c7e1-4b6f-a417-6e4431cbbb24.png)
-![image](https://user-images.githubusercontent.com/77344388/213907207-bf3f53b8-fab6-4f29-aae9-d4b07bd6056a.png)
 
 **Conclusion**
 + We can see that the runtime of the impoved run (with the new parameters) decreased in comparison to the default parameters.  
 + The naive algorithm's runtime is very high.
 + There are algorithms that are very efficient such as pysat.  
-+ Then we want to solve a CNF formula, we can search for parameters once, and then use those parameters for further runs when the CNF-formula is with the same size order.
 
 ## Software Overview
 In order to use the CNF-Solver_EA to solve NP-Complete problem, the user must define the reduction from the problem to CNF formula.  
