@@ -2,6 +2,7 @@ import itertools
 import random
 import time
 import math
+from pprint import pprint
 
 from eckity.algorithms.simple_evolution import SimpleEvolution
 from eckity.breeders.simple_breeder import SimpleBreeder
@@ -129,21 +130,20 @@ def set_params(current_params):
     MAX_WORKERS = current_params[6]
 
 
-def parameter_search(t_start):
-    delta = 0.01*N
-    # min_time = t_start
-    min_time = None
+def parameter_search(t_start=None, params_ranges=None, loop_num=50, indicator="orig", son=0, dynamic_search=True):
+    delta = 0.01*M
+    min_time = t_start
     optimal_params = (POPULATION_SIZE, ELITISM_RATE, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY,
                       MUTATION_PROBABILITY_FOR_EACH, TOURNAMENT_SIZE, MAX_WORKERS)
-    params_ranges = [[i*2 for i in range(1, 10*int(math.sqrt(N)))],
-                     [i/(6*N) for i in range(1, int(N/4))],
-                     [1 for i in range(N)],
-                     [1 for i in range(3*N)],
-                     [i/(4*N) for i in range(int(N/4))],
-                     [i for i in range(1, 5)],
-                     [i for i in range(1, 5)]]
-    # for i in range(N if N < 1000 else 1000):
-    for i in range(100):
+    if not params_ranges:
+        params_ranges = [[i*2 for i in range(1, 10*int(math.sqrt(N)))],
+                         [i/(3*N) for i in range(1, int(N/4))],
+                         [i/(N/2) for i in range(N)],
+                         [1 for i in range(3*N)],
+                         [i/(4*N) for i in range(int(N/4))],
+                         [i for i in range(1, 5)],
+                         [i for i in range(1, 5)]]
+    for i in range(loop_num):
         current_params = []
         for j in range(7):
             rand_index = random.randrange(len(params_ranges[j]))
@@ -155,9 +155,20 @@ def parameter_search(t_start):
         current_fitness = current_run[1]
         if ((not min_time) or (current_time < min_time)) and (M - current_fitness < delta):
             min_time = current_time
-            print(f"\nnew minimum time has been set ! the new time is: {min_time}\n")
-            print(f"\nthe params were: {current_params}\n")
+            print(f"\nnew minimum runtime has been set! the new time is: {min_time}")
+            print(f"the parameters were: {current_params}")
             optimal_params = tuple(current_params)
+
+            if dynamic_search:
+                current_params_indices = [params_ranges[i].index(current_params[i]) for i in range(len(current_params))]
+                params_ranges = [params_ranges[i][j - 3:j + 3] if (j - 3) > 0 else params_ranges[i][:j + 3]
+                                 for i, j in enumerate(current_params_indices)]
+                search_local_max = parameter_search(min_time, params_ranges, int(loop_num / 2), f"son_{son} of {indicator}")
+                runtime_local_max = search_local_max[0]
+                params_local_max = search_local_max[1]
+                min_time = runtime_local_max
+                optimal_params = params_local_max
+    print('----------------------------------------------------------------')
     print(f'Best parameters found:')
     print(f'POPULATION_SIZE: {optimal_params[0]}')
     print(f'ELITISM_RATE: {optimal_params[1]}')
@@ -196,20 +207,18 @@ def collect_data():
     global MAX_WORKERS
 
     experiment_loop = 1
-    experiment_range = 1
+    experiment_range = 4
 
-    # num_of_variables = [(i+1)*50 for i in range(experiment_range)]
-    # num_of_clauses = [(i+1)*100 for i in range(experiment_range)]
-
-    num_of_variables = [76]
-    num_of_clauses = [244]
+    num_of_variables = [(i+1)*25 for i in range(experiment_range)]
+    num_of_clauses = [(i+1)*100 for i in range(experiment_range)]
 
     default = [(0, 0) for _ in range(experiment_range)]
     improved = [(0, 0) for _ in range(experiment_range)]
     pysat = [(0, 0) for _ in range(experiment_range)]
     naive = [(0, 0) for _ in range(experiment_range)]
-
     params_improved = [(0, 0, 0, 0, 0, 0, 0) for _ in range(experiment_range)]
+
+    delta = 4
 
     for _ in range(experiment_loop):
         for i in range(experiment_range):
@@ -227,12 +236,14 @@ def collect_data():
             default_run = run()
 
             default_time = default_run[0]
-            print(f"\nthe default time is: {default_time} and {default_run[1]} were satisfied\n"
-                  f"")
+            print(f"\nthe default time is: {default_time} and {default_run[1]} were satisfied\n")
             default_fitness = default_run[1]
             default[i] = (default[i][0] + default_time, default[i][1] + default_fitness)
 
-            res = parameter_search(default_time)
+            if M - default_fitness < delta:
+                res = parameter_search(default_time)
+            else:
+                res = parameter_search()
             set_params(res[1])
             params_improved[i] = tuple(map(lambda i, j: i + j, res[1], params_improved[i]))
 
@@ -279,24 +290,35 @@ def run_sudoku_example(n):
     global OUTPUT_FILE
     board = Sudoku.sudoku_boards[n - 2]
     cnf = Sudoku.create_CNF(n, board)
-    print(cnf)
+    print('----------------------------------------------------------------')
+    time.sleep(3)
+    print(f'CNF formula generated from board.')
     N = Sudoku.num_of_variables(cnf)
     M = len(cnf)
     print()
     print(f'CNF Number of variables:{N}, Number of clauses:{M}')
-    print('---------------------------------------------------------')
+    print('----------------------------------------------------------------')
+    time.sleep(2)
+    print('Starting parameters search.')
+    time.sleep(2)
+    print('Starting parameters search..')
+    time.sleep(2)
     print('Starting parameters search...')
     time.sleep(3)
-    best_parameters = parameter_search(0)[1]
+    print('----------------------------------------------------------------')
+    best_parameters = parameter_search(dynamic_search=False)[1]
     set_params(best_parameters)
-
+    print('----------------------------------------------------------------')
+    time.sleep(3)
     OUTPUT_FILE = f"./sudoku_statistics.txt"
     results = run()
     assignment = list(results[2])
     board_result = Sudoku.fill_board(n, board, assignment)
+    print('----------------------------------------------------------------')
+    time.sleep(3)
+    print('Board result:')
     Sudoku.print_board(board_result)
     statistics.show_graph(OUTPUT_FILE, M)
-    print()
 
 
 def search_and_compare():
@@ -339,5 +361,5 @@ if __name__ == "__main__":
     MAX_WORKERS = 6
     OUTPUT_FILE = f"./statistics.txt"
 
-    sudoku_size = 3
+    sudoku_size = 2
     run_sudoku_example(sudoku_size)
