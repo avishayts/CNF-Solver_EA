@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 def get_data(statistics_file_name, num_of_clauses):
     with open(statistics_file_name) as f:
         generations = []
-        unsasifiable_clauses = []
+        unsatisfiable_clauses = []
         generation, best_fitness = None, None
         for line in f:
             if line.startswith("generation"):
@@ -15,8 +15,8 @@ def get_data(statistics_file_name, num_of_clauses):
                 generations.append(generation)
             elif line.startswith("best fitness"):
                 best_fitness = float(line.split()[-1])
-                unsasifiable_clauses.append(num_of_clauses - best_fitness)
-    return generations, unsasifiable_clauses
+                unsatisfiable_clauses.append(num_of_clauses - best_fitness)
+    return generations, unsatisfiable_clauses
 
 
 def plot_graphs(data):
