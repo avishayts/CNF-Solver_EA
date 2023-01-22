@@ -2,7 +2,7 @@ import re
 from matplotlib import pyplot as plt
 
 
-def get_data(statistics_file_name, num_of_clauses):
+def get_data_sudoku(statistics_file_name, num_of_clauses):
     with open(statistics_file_name) as f:
         generations = []
         unsatisfiable_clauses = []
@@ -19,7 +19,7 @@ def get_data(statistics_file_name, num_of_clauses):
     return generations, unsatisfiable_clauses
 
 
-def plot_graphs(data):
+def plot_graphs_sudoku(data):
     x, y = data
     plt.plot(x, y, color='blue')
     plt.xlabel("Generation #")
@@ -28,6 +28,6 @@ def plot_graphs(data):
     plt.show()
 
 
-def show_graph(output_file, num_of_clauses):
-    data = get_data(output_file, num_of_clauses)
-    plot_graphs(data)
+def show_graph_sudoku(output_file, num_of_clauses):
+    data = get_data_sudoku(output_file, num_of_clauses)
+    plot_graphs_sudoku(data)

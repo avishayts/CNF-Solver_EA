@@ -2,7 +2,6 @@ import itertools
 import random
 import time
 import math
-from pprint import pprint
 
 from eckity.algorithms.simple_evolution import SimpleEvolution
 from eckity.breeders.simple_breeder import SimpleBreeder
@@ -105,11 +104,8 @@ def naive_solver():
 
 def by_pysat():
     start = time.time()
-    # get_cnf = CNF(from_clauses=cnf)
-    # solver = Solver()
     solver = Solver(bootstrap_with=cnf)
     print('formula is', f'{"s" if solver.solve() else "uns"}atisfiable\n')
-    # print('and the model is:', solver.get_model())
     return time.time() - start, solver.get_model()
 
 
@@ -318,7 +314,7 @@ def run_sudoku_example(n):
     time.sleep(3)
     print('Board result:')
     Sudoku.print_board(board_result)
-    statistics.show_graph(OUTPUT_FILE, M)
+    statistics.show_graph_sudoku(OUTPUT_FILE, M)
 
 
 def search_and_compare():
@@ -361,5 +357,5 @@ if __name__ == "__main__":
     MAX_WORKERS = 6
     OUTPUT_FILE = f"./statistics.txt"
 
-    sudoku_size = 2
+    sudoku_size = 3
     run_sudoku_example(sudoku_size)
