@@ -1,4 +1,6 @@
 # CNF-Solver_EA
+### Dor Zarka 316495357
+### Avishay Tsur 316508431
 
 ## Introduction
 One of the major unsolved issue of computer science is **P versus NP**.  
@@ -233,3 +235,8 @@ After less than 550 generations, there was an individual in the population that 
 
 ## Summary and Conclusion
 
+## References
++ https://github.com/EC-KitY/EC-KitY
++ https://api.eckity.org/eckity.html
++ http://www.evolutionarycomputation.org/slides/
++ https://www.lri.fr/~conchon/ENSPSaclay/project/A_SAT-based_Sudoku_solver.pdf
