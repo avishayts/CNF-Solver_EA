@@ -143,7 +143,7 @@ The idea behind it is that for each cell $i,j$, we need to create $n*n$ variable
 
 + **map_to_index(literal)**: gets a literal and returns its corresponding index of the individual.  
 
-# Sudoku run example
+## Sudoku run examples
 ## size $n = 2, 4*4$ board
 <img width="345" alt="4x4_start" src="https://user-images.githubusercontent.com/77344388/213874934-ddd20b78-f19e-4936-8538-bb3397112d96.PNG">  
 
