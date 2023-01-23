@@ -128,9 +128,12 @@ The function will measure the runtime for a range of different N (in a ratio of 
 + `run()`: Run the evolutionary algorithm.  
 
 We ran all 4 algorithms with different values, and messures their runtime until they find a solution to the CNF formula.  
+Note: If the naive algorithm run for more than 10 seconds, we stopped it.
 
 **Comparison between different algorithms and different parameters:**  
 ![image](https://user-images.githubusercontent.com/77344388/214113063-815f0a70-8e91-404d-a6d5-94826d4a3815.png)
+
+we increased the number of iterations, in order to get better results:
 ![image](https://user-images.githubusercontent.com/77344388/214113078-f5bfa1a1-6de1-40b7-8164-54be64e3de63.png)
 ![image](https://user-images.githubusercontent.com/77344388/214113091-423fa090-8283-4485-9842-61983e0f63b2.png)
 ![image](https://user-images.githubusercontent.com/77344388/214113111-1ef0c7ae-5fdd-4206-9be5-2d774e10d217.png)
