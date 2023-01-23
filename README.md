@@ -274,7 +274,8 @@ Evolutionary Algorithm is a way to solve NP-Complete problem:
 + There is a tradeoff between number of satisfiable clauses and runtime.
 + Most of the searches found that Mutation probability (not probability for each) and Cross-over probability should be 1.
 + We can search for parameters once, and use those parameters to solve other CNF formulas that with the same size order (variables and clauses count).
-
++ With default parameters, the evolutionary algorithm didn't manage to solve Soduko 9x9 board (with logical amount of iterations), but after parameters search it managed to solve it quickly and efficiently. 
++ Parameters search is important.
 
 ## References
 + [EC-KitY GitHub](https://github.com/EC-KitY/EC-KitY)
