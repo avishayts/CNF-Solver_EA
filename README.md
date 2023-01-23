@@ -254,6 +254,16 @@ After less than 550 generations, there was an individual in the population that 
 ](https://www.youtube.com/watch?v=Wm8UGhWSJzU)
 
 ## Summary and Conclusion
+Evolutionary Algorithm is a way to solve NP-Complete problem:  
+1. Find reduction to CNF problem.
+2. Run encoder and recieve CNF formula.
+3. Run parameters search algorithm on the formula in order to find satisfiable assignment (effieciently).
+4. Run the CNF-Solver Evolutionary Algorithm with the optimal parameters that found in parameters search.
+5. Run decoder on the assignment and solve the NP-complete problem.
+
+### Runtime conclusions
++ The naive algorithm is very unefficiently.
++ 
 
 ## References
 + [EC-KitY GitHub](https://github.com/EC-KitY/EC-KitY)
