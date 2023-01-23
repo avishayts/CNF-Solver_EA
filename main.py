@@ -126,7 +126,7 @@ def set_params(current_params):
     MAX_WORKERS = current_params[6]
 
 
-def parameter_search(t_start=None, params_ranges=None, loop_num=50, indicator="orig", son=0, dynamic_search=True):
+def parameter_search(t_start=None, params_ranges=None, loop_num=50, indicator="orig", son=0, dynamic_search=False):
     delta = 0.01*M
     min_time = t_start
     optimal_params = (POPULATION_SIZE, ELITISM_RATE, CROSSOVER_PROBABILITY, MUTATION_PROBABILITY,
@@ -214,13 +214,12 @@ def collect_data():
     naive = [(0, 0) for _ in range(experiment_range)]
     params_improved = [(0, 0, 0, 0, 0, 0, 0) for _ in range(experiment_range)]
 
-    delta = 4
-
     for _ in range(experiment_loop):
         for i in range(experiment_range):
             N = num_of_variables[i]
             M = num_of_clauses[i]
             cnf = gen_cnf(N)
+            delta = 0.02*M
 
             POPULATION_SIZE = 20
             ELITISM_RATE = 1 / 300
@@ -251,9 +250,12 @@ def collect_data():
 
             pysat_res = by_pysat()
             pysat_runtime = pysat_res[0]
-            pysat_assignment = [1 if (i > 0) else 0 for i in pysat_res[1]]
-            pysat_fitness = assignment_clause_count(pysat_assignment)
-            pysat[i] = (pysat[i][0] + pysat_runtime, pysat[i][1] + pysat_fitness)
+            if pysat_res[1]:
+                pysat_assignment = [1 if (i > 0) else 0 for i in pysat_res[1]]
+                pysat_fitness = assignment_clause_count(pysat_assignment)
+                pysat[i] = (pysat[i][0] + pysat_runtime, pysat[i][1] + pysat_fitness)
+            else:
+                pysat[i] = (pysat[i][0] + pysat_runtime, pysat[i][1])
 
             naive_res = naive_solver()
             naive_runtime = naive_res[0]
@@ -333,7 +335,6 @@ def search_and_compare():
 
 
 if __name__ == "__main__":
-    # search_and_compare()
 
     global M
     global N
@@ -347,6 +348,9 @@ if __name__ == "__main__":
     global MAX_WORKERS
     global OUTPUT_FILE
 
+    # OUTPUT_FILE = f"./statistics.txt"
+    # search_and_compare()
+
     # initialize default parameters
     POPULATION_SIZE = 20
     ELITISM_RATE = 1 / 300
@@ -357,5 +361,5 @@ if __name__ == "__main__":
     MAX_WORKERS = 6
     OUTPUT_FILE = f"./statistics.txt"
 
-    sudoku_size = 3
+    sudoku_size = 2
     run_sudoku_example(sudoku_size)
