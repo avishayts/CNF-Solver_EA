@@ -73,7 +73,7 @@ The population consists of M individuals, such that each individual is bit strin
 Higher fitness means higher satisfiable clauses.  
 The maximum fitness is when all the clauses satistiable, means that the CNF formula is satisfiable.
 
-## Parameters search  
+## Parameters Search  
 Given a CNF formula, we would like to find satisfiable assignment with the shortest time. Therefore, we need to find optimal parameters for the evolutionary algorithm.  
 The parameters that we would like to get their optimal values for the algorithm are:
 + Population size
@@ -83,7 +83,7 @@ The parameters that we would like to get their optimal values for the algorithm 
 + Mutation probability for each bit in individual
 + Tournament size
 
-### Parameters search function  
+### Parameters Search Function  
 `parameter_search(t_time, params_ranges, loop_num, indicator, son, dynamic_search)`:  
 
 <ins>Non-Dynamic Search</ins>:  
@@ -102,7 +102,6 @@ This idea is exactly what dynamic search is doing. If a new random set of parame
 ![image](https://user-images.githubusercontent.com/77344388/213907199-9675fe72-db95-4367-a695-7b100a5b2069.png)
 ![image](https://user-images.githubusercontent.com/77344388/213907202-dd58cf7c-b3de-46ff-9b87-9f44dc08d2c0.png)
 ![image](https://user-images.githubusercontent.com/77344388/213907203-d46ac930-c7e1-4b6f-a417-6e4431cbbb24.png)
-![image](https://user-images.githubusercontent.com/77344388/213907207-bf3f53b8-fab6-4f29-aae9-d4b07bd6056a.png)
 
 **Conclusion**
 + When we want to solve a CNF formula, we can search for parameters once, and then use those parameters for further runs when the CNF-formula is with the same size order.
@@ -116,7 +115,7 @@ After we found the optimal parameters, we want to compare it to other algorithms
 
 #### Experiment functions  
 + `collect_data()`: This function collects data on all the different runtime of the different algorithms (naïve algorithm, EC-KitY, EC-KitY after parameters search and pysat). This function generates a random CNF with N variables and M clauses at each iteration, and averages the sum of the runtimes obtained after 'experiment_loop' iterations. 
-The function will measure the runtime for a range of different N (in a ratio of 1:2 with M). The range can be set by the variable 'experiment_range'.
+The function will measure the runtime for a range of different N (in a ratio of 1:4 with M). The range can be set by the variable 'experiment_range'.
 
 + `assignment_clause_count(assignment)`: Counts the number of the satisfied clauses.
 
@@ -131,13 +130,17 @@ The function will measure the runtime for a range of different N (in a ratio of 
 We ran all 4 algorithms with different values, and messures their runtime until they find a solution to the CNF formula.  
 
 **Comparison between different algorithms and different parameters:**  
-![image](https://user-images.githubusercontent.com/77344388/213907186-ca9b4af6-54db-4fb1-a962-3c62aa2449ab.png)
-![image](https://user-images.githubusercontent.com/77344388/213907187-9ec49f65-38e4-4418-ae1e-3ca811c2d0a0.png)
-![image](https://user-images.githubusercontent.com/77344388/213907192-4d13a960-5422-4bcb-b451-fe52c0524e07.png)
+![image](https://user-images.githubusercontent.com/77344388/214113063-815f0a70-8e91-404d-a6d5-94826d4a3815.png)
+![image](https://user-images.githubusercontent.com/77344388/214113078-f5bfa1a1-6de1-40b7-8164-54be64e3de63.png)
+![image](https://user-images.githubusercontent.com/77344388/214113091-423fa090-8283-4485-9842-61983e0f63b2.png)
+![image](https://user-images.githubusercontent.com/77344388/214113111-1ef0c7ae-5fdd-4206-9be5-2d774e10d217.png)
+![image](https://user-images.githubusercontent.com/77344388/214113139-f2ea6fa6-af93-4331-aafb-935fc1b4a0a2.png)
+![image](https://user-images.githubusercontent.com/77344388/214113163-1a294239-3d1a-4a25-befc-e84cfadb59aa.png)
 
 **Conclusion**
-+ We can see that the runtime of the impoved run (with the new parameters) decreased in comparison to the default parameters.  
-+ The naive algorithm's runtime is very high.
++ We can see that the runtime of the impoved run (with the new parameters) decreased in comparison to the default parameters and also found better results.  
+The improved run is better than the default not only **in time**, but also **in success**!
++ The naive algorithm's runtime is very high and can't solve any CNF formula with decent number of variables.
 + There are algorithms that are very efficient such as pysat.  
 
 ## Software Overview
@@ -261,9 +264,17 @@ Evolutionary Algorithm is a way to solve NP-Complete problem:
 4. Run the CNF-Solver Evolutionary Algorithm with the optimal parameters that found in parameters search.
 5. Run decoder on the assignment and solve the NP-complete problem.
 
-### Runtime conclusions
-+ The naive algorithm is very unefficiently.
-+ 
+### Runtime and Comparison conclusions
++ The naive algorithm is very unefficient and fails to solve many CNF formulas.
++ Parameter Search is essential because without optimal parameters, there are cases that the algorithm will not find satisfiable assignment. Also, with the optimal parameters the algorithm will solve it quicker.
++ There are CNF-Solver algorithms that are better than evolutionary algorithm, such as Pysat.
+
+### Parameters conclusions
++ Larger the population, better the results and higher runtime.
++ There is a tradeoff between number of satisfiable clauses and runtime.
++ Most of the searches found that Mutation probability (not probability for each) and Cross-over probability should be 1.
++ We can search for parameters only once, and use those parameter to solve other CNF formulas that with the same size order (variables and clauses count).
+
 
 ## References
 + [EC-KitY GitHub](https://github.com/EC-KitY/EC-KitY)
