@@ -334,11 +334,11 @@ def search_and_compare():
     naive_data = data[3]
     params_data = data[4]
 
-#     print(default_data)
-#     print(improved_data)
-#     print(pysat_data)
-#     print(naive_data)
-#     print(params_data)
+    print(default_data)
+    print(improved_data)
+    print(pysat_data)
+    print(naive_data)
+    print(params_data)
 
 
 if __name__ == "__main__":
@@ -357,6 +357,7 @@ if __name__ == "__main__":
 
     # OUTPUT_FILE = f"./statistics.txt"
     # search_and_compare()
+    # statistics.compare_results()
 
     # initialize default parameters
     POPULATION_SIZE = 20
@@ -370,3 +371,4 @@ if __name__ == "__main__":
 
     sudoku_size = 2
     run_sudoku_example(sudoku_size)
+
