@@ -273,7 +273,7 @@ Evolutionary Algorithm is a way to solve NP-Complete problem:
 + Larger the population, better the results and higher runtime.
 + There is a tradeoff between number of satisfiable clauses and runtime.
 + Most of the searches found that Mutation probability (not probability for each) and Cross-over probability should be 1.
-+ We can search for parameters only once, and use those parameter to solve other CNF formulas that with the same size order (variables and clauses count).
++ We can search for parameters once, and use those parameters to solve other CNF formulas that with the same size order (variables and clauses count).
 
 
 ## References
