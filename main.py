@@ -135,7 +135,7 @@ def parameter_search(t_start=None, params_ranges=None, loop_num=50, indicator="o
         params_ranges = [[i*2 for i in range(1, 10*int(math.sqrt(N)))],
                          [i/(3*N) for i in range(1, int(N/4))],
                          [i/(N/2) for i in range(N)],
-                         [1 for i in range(3*N)],
+                         [i/N for i in range(3*N)],
                          [i/(4*N) for i in range(int(N/4))],
                          [i for i in range(1, 5)],
                          [i for i in range(1, 5)]]
@@ -156,12 +156,19 @@ def parameter_search(t_start=None, params_ranges=None, loop_num=50, indicator="o
             optimal_params = tuple(current_params)
 
             if dynamic_search:
+                print(f"\nson_{son} of {indicator} starting searching for local maximum:\n")
                 current_params_indices = [params_ranges[i].index(current_params[i]) for i in range(len(current_params))]
                 params_ranges = [params_ranges[i][j - 3:j + 3] if (j - 3) > 0 else params_ranges[i][:j + 3]
                                  for i, j in enumerate(current_params_indices)]
                 search_local_max = parameter_search(min_time, params_ranges, int(loop_num / 2), f"son_{son} of {indicator}")
+                print(f"\nson_{son} of {indicator} end the search for local maximum. {indicator} will take it from here.")
                 runtime_local_max = search_local_max[0]
                 params_local_max = search_local_max[1]
+                if runtime_local_max < min_time:
+                    print(f"son_{son} of {indicator} was able to improve the runtime from {min_time} to {runtime_local_max}\n")
+                else:
+                    print(f"son_{son} of {indicator} wasn't able to improve the runtime\n")
+                son += 1
                 min_time = runtime_local_max
                 optimal_params = params_local_max
     print('----------------------------------------------------------------')
@@ -219,7 +226,7 @@ def collect_data():
             N = num_of_variables[i]
             M = num_of_clauses[i]
             cnf = gen_cnf(N)
-            delta = 0.02*M
+            delta = 0.01*M
 
             POPULATION_SIZE = 20
             ELITISM_RATE = 1 / 300
@@ -327,11 +334,11 @@ def search_and_compare():
     naive_data = data[3]
     params_data = data[4]
 
-    print(default_data)
-    print(improved_data)
-    print(pysat_data)
-    print(naive_data)
-    print(params_data)
+#     print(default_data)
+#     print(improved_data)
+#     print(pysat_data)
+#     print(naive_data)
+#     print(params_data)
 
 
 if __name__ == "__main__":
