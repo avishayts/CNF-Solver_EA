@@ -123,7 +123,8 @@ We ran all 4 algorithms with different values, and messures their runtime until 
 Note: If the naive algorithm run for more than 10 seconds, we stopped it.
 
 **Comparison between different algorithms and different parameters:**  
-![image](https://user-images.githubusercontent.com/77344388/214113063-815f0a70-8e91-404d-a6d5-94826d4a3815.png)
+![image](https://user-images.githubusercontent.com/77344388/214149957-97ec3cd5-9891-4b45-af89-e9b6e7457b68.png)
+
 
 we increased the number of iterations, in order to get better results:
 ![image](https://user-images.githubusercontent.com/77344388/214113078-f5bfa1a1-6de1-40b7-8164-54be64e3de63.png)
