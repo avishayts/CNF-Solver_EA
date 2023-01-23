@@ -94,14 +94,6 @@ This was done intentionally in order to reduce significantly the runtime. Only i
 if we assume that rather than the idea of a singular suitable set of global parameters, there are many ‘local’s maxima’  we can get  by different sets of global parameters, we may wish to keep on searching ‘locally’ after finding better new set of a global parameters. Nevertheless, we also wish to keep on searching for different ‘local’s maxima’.  
 This idea is exactly what dynamic search is doing. If a new random set of parameters got better results than the last best set, dynamic search will search for loop_num/2 iterations on relatively small ranges around the new parameters which was found. If a new better local set  was found, then it will be set as the best new set and the function will search locally recursively.  After the local search ends, the search will keep on searching randomly on the full ranges.  
 
-**Graphs that show the dependence between number of variables (N) to the parameters that we search for:**
-
-![image](https://user-images.githubusercontent.com/77344388/213907193-17c82208-08b6-45bf-baab-a88cc3333e53.png)
-![image](https://user-images.githubusercontent.com/77344388/213907194-6174d952-702d-4811-a4a7-810527346562.png)
-![image](https://user-images.githubusercontent.com/77344388/213907198-c7de6236-17c0-4d74-a72b-f9dc0d54051a.png)
-![image](https://user-images.githubusercontent.com/77344388/213907199-9675fe72-db95-4367-a695-7b100a5b2069.png)
-![image](https://user-images.githubusercontent.com/77344388/213907202-dd58cf7c-b3de-46ff-9b87-9f44dc08d2c0.png)
-![image](https://user-images.githubusercontent.com/77344388/213907203-d46ac930-c7e1-4b6f-a417-6e4431cbbb24.png)
 
 **Conclusion**
 + When we want to solve a CNF formula, we can search for parameters once, and then use those parameters for further runs when the CNF-formula is with the same size order.
